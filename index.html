@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>帶薪拉屎計算器</title>
+    <style>
+      :root {
+        --bg: #f5f1e8;
+        --ink: #191714;
+        --muted: #6f675c;
+        --panel: #fffaf0;
+        --panel-2: #f0e3d0;
+        --line: #d7c4aa;
+        --green: #206f4f;
+        --green-2: #7ab58f;
+        --red: #c44f3d;
+        --yellow: #f0bd4f;
+        --blue: #2f6d9f;
+        --shadow: 0 18px 40px rgba(39, 29, 16, 0.13);
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, rgba(240, 189, 79, 0.22), transparent 26rem),
+          linear-gradient(135deg, #f5f1e8 0%, #efe2cf 52%, #e2d4c3 100%);
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      .app {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 36px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .logo {
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        border: 2px solid var(--ink);
+        border-radius: 8px;
+        background: var(--yellow);
+        box-shadow: 4px 4px 0 var(--ink);
+        flex: 0 0 auto;
+      }
+
+      .brand h1 {
+        margin: 0;
+        font-size: clamp(1.45rem, 3vw, 2.35rem);
+        line-height: 1.05;
+        letter-spacing: 0;
+      }
+
+      .brand p {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 38px;
+        border: 1px solid rgba(25, 23, 20, 0.18);
+        border-radius: 999px;
+        padding: 8px 13px;
+        color: #315244;
+        background: rgba(255, 250, 240, 0.72);
+        white-space: nowrap;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(330px, 0.78fr);
+        gap: 22px;
+        align-items: start;
+      }
+
+      .panel {
+        width: 100%;
+        max-width: 100%;
+        border: 2px solid var(--ink);
+        border-radius: 8px;
+        background: rgba(255, 250, 240, 0.92);
+        box-shadow: var(--shadow);
+      }
+
+      .calculator {
+        padding: 24px;
+      }
+
+      .section-title {
+        margin: 0 0 16px;
+        font-size: 1.05rem;
+      }
+
+      .mode-tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 5px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #f2e6d3;
+        margin-bottom: 18px;
+      }
+
+      .mode-tabs button {
+        border: 0;
+        border-radius: 6px;
+        min-height: 42px;
+        background: transparent;
+        cursor: pointer;
+        color: #62584c;
+        font-weight: 800;
+      }
+
+      .mode-tabs button[aria-pressed="true"] {
+        background: var(--ink);
+        color: #fffaf0;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .subsection {
+        margin-top: 22px;
+        padding-top: 18px;
+        border-top: 2px dashed #d3bea2;
+      }
+
+      .subsection-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+
+      .subsection-head h3 {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 5px 9px;
+        color: var(--muted);
+        background: rgba(255, 253, 250, 0.7);
+        font-size: 0.78rem;
+        font-weight: 850;
+        white-space: nowrap;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+      }
+
+      .field label {
+        font-size: 0.9rem;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .input-wrap {
+        display: flex;
+        align-items: center;
+        min-height: 48px;
+        border: 1.5px solid var(--line);
+        border-radius: 8px;
+        background: #fffdfa;
+        overflow: hidden;
+      }
+
+      .input-wrap span {
+        padding: 0 12px;
+        color: var(--muted);
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .input-wrap input,
+      .input-wrap select {
+        min-width: 0;
+        width: 100%;
+        height: 48px;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        padding: 0 12px;
+        color: var(--ink);
+        font-weight: 900;
+      }
+
+      .input-wrap input:first-child,
+      .input-wrap select:first-child {
+        padding-left: 14px;
+      }
+
+      .salary-mode-hourly .monthly-only,
+      .salary-mode-monthly .hourly-only {
+        display: none;
+      }
+
+      .quick-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 18px;
+      }
+
+      .chip {
+        min-height: 36px;
+        border: 1.5px solid var(--ink);
+        border-radius: 999px;
+        padding: 7px 11px;
+        background: #fffdfa;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 800;
+        min-width: 0;
+      }
+
+      .chip:hover {
+        transform: translateY(-1px);
+        box-shadow: 3px 3px 0 var(--ink);
+      }
+
+      .results {
+        overflow: hidden;
+      }
+
+      .receipt {
+        padding: 24px;
+        background: linear-gradient(180deg, #fffdfa 0%, #f7ead7 100%);
+      }
+
+      .receipt-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: flex-start;
+        padding-bottom: 18px;
+        border-bottom: 2px dashed #cdb69b;
+      }
+
+      .receipt-head p {
+        margin: 4px 0 0;
+        color: var(--muted);
+      }
+
+      .visual {
+        width: 104px;
+        height: 104px;
+        border: 2px solid var(--ink);
+        border-radius: 8px;
+        background: #e5f0dc;
+        box-shadow: 5px 5px 0 var(--ink);
+        position: relative;
+        flex: 0 0 auto;
+      }
+
+      .visual::before {
+        content: "";
+        position: absolute;
+        left: 19px;
+        right: 19px;
+        bottom: 18px;
+        height: 42px;
+        border: 4px solid var(--ink);
+        border-top: 0;
+        border-radius: 0 0 26px 26px;
+        background: #fffaf0;
+      }
+
+      .visual::after {
+        content: "$";
+        position: absolute;
+        top: 17px;
+        left: 50%;
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        border: 3px solid var(--ink);
+        border-radius: 50%;
+        transform: translateX(-50%);
+        background: var(--yellow);
+        font-size: 1.6rem;
+        font-weight: 950;
+      }
+
+      .big-number {
+        margin: 18px 0 2px;
+        font-size: clamp(2.45rem, 6vw, 4.5rem);
+        line-height: 0.98;
+        font-weight: 950;
+        letter-spacing: 0;
+      }
+
+      .big-number small {
+        font-size: 1rem;
+        color: var(--muted);
+      }
+
+      .verdict {
+        margin: 10px 0 0;
+        padding: 11px 12px;
+        border-radius: 8px;
+        background: #e8f2e4;
+        color: #25533f;
+        font-weight: 850;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .stat {
+        min-height: 88px;
+        padding: 13px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 253, 250, 0.78);
+      }
+
+      .stat span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 750;
+      }
+
+      .stat strong {
+        display: block;
+        margin-top: 6px;
+        font-size: 1.28rem;
+        line-height: 1.15;
+      }
+
+      .meter {
+        padding: 18px 24px 22px;
+        border-top: 2px solid var(--ink);
+        background: #efe0ca;
+      }
+
+      .meter-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 10px;
+        color: var(--muted);
+        font-size: 0.88rem;
+        font-weight: 800;
+      }
+
+      .bar {
+        height: 16px;
+        border: 2px solid var(--ink);
+        border-radius: 999px;
+        overflow: hidden;
+        background: #fffdfa;
+      }
+
+      .bar-fill {
+        height: 100%;
+        width: 0%;
+        border-right: 2px solid var(--ink);
+        background: linear-gradient(90deg, var(--green-2), var(--yellow), var(--red));
+        transition: width 260ms ease;
+      }
+
+      .fine-print {
+        margin: 18px 0 0;
+        color: var(--muted);
+        font-size: 0.86rem;
+        line-height: 1.7;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+
+      .main-action,
+      .ghost-action {
+        min-height: 44px;
+        border: 2px solid var(--ink);
+        border-radius: 8px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-weight: 900;
+      }
+
+      .main-action {
+        background: var(--green);
+        color: #fffaf0;
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+
+      .ghost-action {
+        background: #fffdfa;
+        color: var(--ink);
+      }
+
+      .share-box {
+        margin-top: 14px;
+        min-height: 54px;
+        padding: 13px;
+        border: 1px dashed #aa9579;
+        border-radius: 8px;
+        background: rgba(255, 253, 250, 0.7);
+        color: #4f453a;
+        line-height: 1.55;
+        word-break: break-word;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      @media (max-width: 860px) {
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .app {
+          width: min(100% - 20px, 1180px);
+          padding-top: 16px;
+        }
+
+        .brand {
+          align-items: flex-start;
+        }
+
+        .brand h1 {
+          font-size: 1.55rem;
+        }
+
+        .calculator,
+        .receipt {
+          padding: 18px;
+        }
+
+        .form-grid,
+        .stats {
+          grid-template-columns: 1fr;
+        }
+
+        .receipt-head {
+          align-items: center;
+          flex-wrap: wrap;
+        }
+
+        .quick-row {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .chip {
+          width: 100%;
+          padding-inline: 8px;
+          white-space: normal;
+        }
+
+        .visual {
+          width: 78px;
+          height: 78px;
+        }
+
+        .visual::before {
+          left: 16px;
+          right: 16px;
+          bottom: 14px;
+          height: 32px;
+        }
+
+        .visual::after {
+          top: 12px;
+          width: 35px;
+          height: 35px;
+          font-size: 1.25rem;
+        }
+
+        .big-number {
+          font-size: 2.7rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app salary-mode-monthly">
+      <header class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 8h12v3a6 6 0 0 1-6 6h0a6 6 0 0 1-6-6V8Z" stroke="#191714" stroke-width="2" />
+              <path d="M7 8V5h10v3" stroke="#191714" stroke-width="2" />
+              <path d="M10 20h4" stroke="#191714" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div>
+            <h1>帶薪拉屎計算器</h1>
+            <p>把上班蹲廁換算成公司默默贊助你的金額。</p>
+          </div>
+        </div>
+        <div class="pill" aria-label="即時計算">
+          <span aria-hidden="true">●</span>
+          即時計算，不上傳資料
+        </div>
+      </header>
+
+      <section class="grid" aria-label="計算器">
+        <form class="panel calculator" id="calculator">
+          <h2 class="section-title">輸入你的工時與蹲廁參數</h2>
+
+          <div class="mode-tabs" role="group" aria-label="計薪方式">
+            <button type="button" id="monthlyMode" aria-pressed="true">月薪制</button>
+            <button type="button" id="hourlyMode" aria-pressed="false">時薪制</button>
+          </div>
+
+          <div class="form-grid">
+            <div class="field monthly-only">
+              <label for="monthlySalary">月薪</label>
+              <div class="input-wrap">
+                <span>NT$</span>
+                <input id="monthlySalary" type="number" min="0" step="100" value="56768" inputmode="decimal" />
+              </div>
+            </div>
+
+            <div class="field hourly-only">
+              <label for="hourlyWage">時薪</label>
+              <div class="input-wrap">
+                <span>NT$</span>
+                <input id="hourlyWage" type="number" min="0" step="1" value="220" inputmode="decimal" />
+              </div>
+            </div>
+
+            <div class="field monthly-only">
+              <label for="workDays">每月工作天</label>
+              <div class="input-wrap">
+                <input id="workDays" type="number" min="1" max="31" step="1" value="22" inputmode="numeric" />
+                <span>天</span>
+              </div>
+            </div>
+
+            <div class="field monthly-only">
+              <label for="hoursPerDay">每日工時</label>
+              <div class="input-wrap">
+                <input id="hoursPerDay" type="number" min="1" max="24" step="0.5" value="8" inputmode="decimal" />
+                <span>小時</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="snackPrice">快樂換算單位</label>
+              <div class="input-wrap">
+                <select id="snackPrice">
+                  <option value="70">拿鐵 NT$70</option>
+                  <option value="90" selected>雞排 NT$90</option>
+                  <option value="65">奶茶 NT$65</option>
+                  <option value="120">便當 NT$120</option>
+                  <option value="150">手搖加點心 NT$150</option>
+                  <option value="180">啤酒 NT$180</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="subsection">
+            <div class="subsection-head">
+              <h3>蹲廁計算</h3>
+              <span class="tag">原始戰場</span>
+            </div>
+            <div class="form-grid">
+              <div class="field">
+                <label for="poopMinutesPerTrip">單次蹲廁時間</label>
+                <div class="input-wrap">
+                  <input id="poopMinutesPerTrip" type="number" min="0" max="180" step="1" value="12" inputmode="numeric" />
+                  <span>分鐘</span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="poopTripsPerDay">每天蹲幾次</label>
+                <div class="input-wrap">
+                  <input id="poopTripsPerDay" type="number" min="0" max="20" step="0.5" value="1" inputmode="decimal" />
+                  <span>次</span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="poopDays">每月上班蹲廁天數</label>
+                <div class="input-wrap">
+                  <input id="poopDays" type="number" min="0" max="31" step="1" value="18" inputmode="numeric" />
+                  <span>天</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="quick-row" aria-label="蹲廁快速情境">
+              <button class="chip" type="button" data-kind="poop" data-minutes="5" data-trips="1">閃電型 5 分鐘</button>
+              <button class="chip" type="button" data-kind="poop" data-minutes="12" data-trips="1">標準型 12 分鐘</button>
+              <button class="chip" type="button" data-kind="poop" data-minutes="25" data-trips="1">沉思型 25 分鐘</button>
+              <button class="chip" type="button" data-kind="poop" data-minutes="15" data-trips="2">分批作業</button>
+            </div>
+          </div>
+
+        </form>
+
+        <aside class="panel results" aria-label="計算結果">
+          <div class="receipt">
+            <div class="receipt-head">
+              <div>
+                <h2 class="section-title">今日公司贊助</h2>
+                <p id="hourlyText">換算時薪：NT$323</p>
+              </div>
+              <div class="visual" aria-hidden="true"></div>
+            </div>
+
+            <div class="big-number">
+              <span id="dailyPay">NT$65</span>
+              <small>/ 天</small>
+            </div>
+            <p class="verdict" id="verdict">今天的蹲廁價值約等於 0.7 份雞排。</p>
+
+            <div class="stats">
+              <div class="stat">
+                <span>每次蹲廁收入</span>
+                <strong id="tripPay">NT$65</strong>
+              </div>
+              <div class="stat">
+                <span>每月累積</span>
+                <strong id="monthlyPay">NT$1,161</strong>
+              </div>
+              <div class="stat">
+                <span>一年累積</span>
+                <strong id="yearlyPay">NT$13,931</strong>
+              </div>
+              <div class="stat">
+                <span>一年蹲廁總工時</span>
+                <strong id="yearlyHours">43.2 小時</strong>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="main-action" id="shareButton" type="button">產生炫耀文</button>
+              <button class="ghost-action" id="resetButton" type="button">回到預設值</button>
+            </div>
+            <div class="share-box hidden" id="shareBox" aria-live="polite"></div>
+          </div>
+
+          <div class="meter">
+            <div class="meter-top">
+              <span>帶薪蹲廁戰力</span>
+              <span id="meterLabel">健康幽默區</span>
+            </div>
+            <div class="bar" aria-hidden="true">
+              <div class="bar-fill" id="barFill"></div>
+            </div>
+            <p class="fine-print">
+              小提醒：這是迷因計算器，不是鼓勵憋尿、摸魚或久坐。若排便習慣突然改變、疼痛或出血，請找專業醫療人員評估。
+            </p>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <script>
+      const app = document.querySelector(".app");
+      const calculator = document.querySelector("#calculator");
+      const monthlyMode = document.querySelector("#monthlyMode");
+      const hourlyMode = document.querySelector("#hourlyMode");
+      const monthlySalary = document.querySelector("#monthlySalary");
+      const hourlyWage = document.querySelector("#hourlyWage");
+      const workDays = document.querySelector("#workDays");
+      const hoursPerDay = document.querySelector("#hoursPerDay");
+      const poopMinutesPerTrip = document.querySelector("#poopMinutesPerTrip");
+      const poopTripsPerDay = document.querySelector("#poopTripsPerDay");
+      const poopDays = document.querySelector("#poopDays");
+      const snackPrice = document.querySelector("#snackPrice");
+      const hourlyText = document.querySelector("#hourlyText");
+      const dailyPay = document.querySelector("#dailyPay");
+      const tripPay = document.querySelector("#tripPay");
+      const monthlyPay = document.querySelector("#monthlyPay");
+      const yearlyPay = document.querySelector("#yearlyPay");
+      const yearlyHours = document.querySelector("#yearlyHours");
+      const verdict = document.querySelector("#verdict");
+      const barFill = document.querySelector("#barFill");
+      const meterLabel = document.querySelector("#meterLabel");
+      const shareButton = document.querySelector("#shareButton");
+      const resetButton = document.querySelector("#resetButton");
+      const shareBox = document.querySelector("#shareBox");
+
+      let salaryMode = "monthly";
+
+      const moneyNumber = new Intl.NumberFormat("zh-TW", {
+        maximumFractionDigits: 0,
+      });
+
+      function formatMoney(value) {
+        return `NT$${moneyNumber.format(Math.round(value))}`;
+      }
+
+      function numericValue(input, fallback = 0) {
+        const value = Number(input.value);
+        return Number.isFinite(value) ? value : fallback;
+      }
+
+      function setMode(mode) {
+        salaryMode = mode;
+        app.classList.toggle("salary-mode-monthly", mode === "monthly");
+        app.classList.toggle("salary-mode-hourly", mode === "hourly");
+        monthlyMode.setAttribute("aria-pressed", String(mode === "monthly"));
+        hourlyMode.setAttribute("aria-pressed", String(mode === "hourly"));
+        calculate();
+      }
+
+      function getHourlyRate() {
+        if (salaryMode === "hourly") {
+          return Math.max(0, numericValue(hourlyWage));
+        }
+
+        const days = Math.max(1, numericValue(workDays, 22));
+        const hours = Math.max(1, numericValue(hoursPerDay, 8));
+        return Math.max(0, numericValue(monthlySalary)) / days / hours;
+      }
+
+      function currentSnackName() {
+        const option = snackPrice.options[snackPrice.selectedIndex];
+        return option.textContent.replace(/\s*NT\$.*/, "");
+      }
+
+      function calculate() {
+        const hourlyRate = getHourlyRate();
+        const poopMinutes = Math.max(0, numericValue(poopMinutesPerTrip));
+        const poopTrips = Math.max(0, numericValue(poopTripsPerDay));
+        const poopActiveDays = Math.max(0, numericValue(poopDays));
+        const snack = Math.max(1, numericValue(snackPrice, 90));
+
+        const perTrip = hourlyRate * (poopMinutes / 60);
+        const perDay = perTrip * poopTrips;
+        const perMonth = perDay * poopActiveDays;
+        const perYear = perMonth * 12;
+        const hoursPerYear = (poopMinutes * poopTrips * poopActiveDays * 12) / 60;
+        const snackCount = perDay / snack;
+        const intensity = Math.min(100, Math.round((poopMinutes * poopTrips * 100) / 45));
+
+        hourlyText.textContent = `換算時薪：${formatMoney(hourlyRate)}`;
+        tripPay.textContent = formatMoney(perTrip);
+        dailyPay.textContent = formatMoney(perDay);
+        monthlyPay.textContent = formatMoney(perMonth);
+        yearlyPay.textContent = formatMoney(perYear);
+        yearlyHours.textContent = `${hoursPerYear.toFixed(1)} 小時`;
+        verdict.textContent = `今天的蹲廁價值約等於 ${snackCount.toFixed(1)} 份${currentSnackName()}。`;
+        barFill.style.width = `${intensity}%`;
+
+        if (poopMinutes * poopTrips < 10) {
+          meterLabel.textContent = "快進快出型";
+        } else if (poopMinutes * poopTrips <= 30) {
+          meterLabel.textContent = "健康幽默區";
+        } else if (poopMinutes * poopTrips <= 45) {
+          meterLabel.textContent = "沉思會議區";
+        } else {
+          meterLabel.textContent = "建議起來走走";
+        }
+
+        shareBox.classList.add("hidden");
+      }
+
+      calculator.addEventListener("input", calculate);
+      snackPrice.addEventListener("change", calculate);
+      monthlyMode.addEventListener("click", () => setMode("monthly"));
+      hourlyMode.addEventListener("click", () => setMode("hourly"));
+
+      document.querySelectorAll(".chip").forEach((button) => {
+        button.addEventListener("click", () => {
+          poopMinutesPerTrip.value = button.dataset.minutes;
+          poopTripsPerDay.value = button.dataset.trips;
+          calculate();
+        });
+      });
+
+      shareButton.addEventListener("click", () => {
+        const text = `我剛剛用帶薪拉屎計算器算了一下：每天公司大約贊助我 ${dailyPay.textContent}，一年累積 ${yearlyPay.textContent}。這不是摸魚，這是現金流管理。`;
+        shareBox.textContent = text;
+        shareBox.classList.remove("hidden");
+      });
+
+      resetButton.addEventListener("click", () => {
+        monthlySalary.value = 56768;
+        hourlyWage.value = 220;
+        workDays.value = 22;
+        hoursPerDay.value = 8;
+        poopMinutesPerTrip.value = 12;
+        poopTripsPerDay.value = 1;
+        poopDays.value = 18;
+        snackPrice.value = 90;
+        setMode("monthly");
+      });
+
+      calculate();
+    </script>
+  </body>
+</html>
