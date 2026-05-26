@@ -99,6 +99,35 @@
         white-space: nowrap;
       }
 
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .stealth-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 38px;
+        border: 2px solid var(--ink);
+        border-radius: 8px;
+        padding: 8px 12px;
+        color: var(--ink);
+        background: #fffdfa;
+        cursor: pointer;
+        font-weight: 900;
+        box-shadow: 3px 3px 0 var(--ink);
+        white-space: nowrap;
+      }
+
+      .stealth-button:hover {
+        transform: translateY(-1px);
+      }
+
       .grid {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(330px, 0.78fr);
@@ -462,14 +491,281 @@
         display: none;
       }
 
+      .work-mode {
+        display: none;
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 36px;
+        color: #18212b;
+      }
+
+      body.fake-mode {
+        background: #f3f6f8;
+        color: #18212b;
+      }
+
+      body.fake-mode .app {
+        display: none;
+      }
+
+      body.fake-mode .work-mode {
+        display: block;
+      }
+
+      .work-shell {
+        border: 1px solid #cbd5df;
+        border-radius: 8px;
+        background: #ffffff;
+        box-shadow: 0 18px 45px rgba(30, 41, 59, 0.12);
+        overflow: hidden;
+      }
+
+      .work-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        padding: 18px 22px;
+        border-bottom: 1px solid #d8e0e8;
+        background: #162338;
+        color: #f8fafc;
+      }
+
+      .work-header h1 {
+        margin: 0;
+        font-size: 1.05rem;
+        letter-spacing: 0;
+      }
+
+      .work-header p {
+        margin: 4px 0 0;
+        color: #b7c5d5;
+        font-size: 0.86rem;
+      }
+
+      .work-exit {
+        min-height: 36px;
+        border: 1px solid #7f8da1;
+        border-radius: 6px;
+        padding: 8px 11px;
+        background: #223553;
+        color: #f8fafc;
+        cursor: pointer;
+        font-weight: 800;
+      }
+
+      .work-content {
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1fr);
+        min-height: 680px;
+      }
+
+      .work-sidebar {
+        border-right: 1px solid #d8e0e8;
+        background: #f7f9fb;
+        padding: 18px 14px;
+      }
+
+      .work-sidebar strong {
+        display: block;
+        margin-bottom: 12px;
+        color: #405066;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+      }
+
+      .work-nav {
+        display: grid;
+        gap: 6px;
+      }
+
+      .work-nav span {
+        display: block;
+        border-radius: 6px;
+        padding: 9px 10px;
+        color: #405066;
+        font-size: 0.9rem;
+        font-weight: 750;
+      }
+
+      .work-nav span.active {
+        background: #e7eef7;
+        color: #1a4b84;
+      }
+
+      .dashboard {
+        padding: 22px;
+      }
+
+      .dashboard-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+
+      .dashboard h2 {
+        margin: 0;
+        font-size: 1.35rem;
+      }
+
+      .dashboard-note {
+        margin: 5px 0 0;
+        color: #66758a;
+      }
+
+      .status-chip {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        border-radius: 999px;
+        padding: 6px 10px;
+        color: #166534;
+        background: #dcfce7;
+        font-size: 0.82rem;
+        font-weight: 850;
+        white-space: nowrap;
+      }
+
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .kpi {
+        min-height: 104px;
+        border: 1px solid #d8e0e8;
+        border-radius: 8px;
+        padding: 14px;
+        background: #ffffff;
+      }
+
+      .kpi span {
+        display: block;
+        color: #66758a;
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .kpi strong {
+        display: block;
+        margin-top: 10px;
+        font-size: 1.55rem;
+      }
+
+      .kpi em {
+        display: block;
+        margin-top: 8px;
+        color: #15803d;
+        font-style: normal;
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .work-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.8fr);
+        gap: 14px;
+      }
+
+      .work-card {
+        border: 1px solid #d8e0e8;
+        border-radius: 8px;
+        background: #ffffff;
+        overflow: hidden;
+      }
+
+      .work-card h3 {
+        margin: 0;
+        padding: 14px 16px;
+        border-bottom: 1px solid #d8e0e8;
+        color: #243246;
+        font-size: 0.95rem;
+      }
+
+      .work-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.86rem;
+      }
+
+      .work-table th,
+      .work-table td {
+        padding: 12px 14px;
+        border-bottom: 1px solid #edf1f5;
+        text-align: left;
+      }
+
+      .work-table th {
+        color: #66758a;
+        background: #f7f9fb;
+        font-size: 0.76rem;
+      }
+
+      .progress-track {
+        height: 8px;
+        border-radius: 999px;
+        background: #e5eaf0;
+        overflow: hidden;
+      }
+
+      .progress-track span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: #2563eb;
+      }
+
+      .log-list {
+        display: grid;
+        gap: 10px;
+        padding: 14px;
+      }
+
+      .log-item {
+        border-left: 3px solid #2563eb;
+        padding: 4px 0 4px 10px;
+        color: #405066;
+        font-size: 0.86rem;
+        line-height: 1.45;
+      }
+
+      .log-item span {
+        display: block;
+        color: #8a98aa;
+        font-size: 0.74rem;
+        font-weight: 800;
+      }
+
       @media (max-width: 860px) {
         .topbar {
           align-items: flex-start;
           flex-direction: column;
         }
 
+        .top-actions {
+          justify-content: flex-start;
+        }
+
         .grid {
           grid-template-columns: 1fr;
+        }
+
+        .work-content,
+        .work-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .work-sidebar {
+          border-right: 0;
+          border-bottom: 1px solid #d8e0e8;
+        }
+
+        .kpi-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
 
@@ -535,6 +831,24 @@
         .big-number {
           font-size: 2.7rem;
         }
+
+        .work-mode {
+          width: min(100% - 20px, 1180px);
+          padding-top: 16px;
+        }
+
+        .work-header,
+        .dashboard-top {
+          flex-direction: column;
+        }
+
+        .dashboard {
+          padding: 16px;
+        }
+
+        .kpi-grid {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
@@ -554,9 +868,15 @@
             <p>把上班蹲廁換算成公司默默贊助你的金額。</p>
           </div>
         </div>
-        <div class="pill" aria-label="即時計算">
-          <span aria-hidden="true">●</span>
-          即時計算，不上傳資料
+        <div class="top-actions">
+          <div class="pill" aria-label="即時計算">
+            <span aria-hidden="true">●</span>
+            即時計算，不上傳資料
+          </div>
+          <button class="stealth-button" id="fakeWorkButton" type="button" aria-pressed="false">
+            <span aria-hidden="true">▦</span>
+            假工作模式
+          </button>
         </div>
       </header>
 
@@ -716,6 +1036,128 @@
       </section>
     </main>
 
+    <section class="work-mode" aria-label="假工作模式">
+      <div class="work-shell">
+        <header class="work-header">
+          <div>
+            <h1>Operational Alignment Dashboard</h1>
+            <p>Q2 throughput review · Internal planning workspace</p>
+          </div>
+          <button class="work-exit" id="exitFakeWorkButton" type="button">返回計算器</button>
+        </header>
+
+        <div class="work-content">
+          <aside class="work-sidebar" aria-label="工作導覽">
+            <strong>Workspace</strong>
+            <nav class="work-nav" aria-label="Dashboard sections">
+              <span class="active">Executive Summary</span>
+              <span>Resource Mapping</span>
+              <span>Risk Register</span>
+              <span>Weekly Sync Notes</span>
+              <span>Backlog Review</span>
+            </nav>
+          </aside>
+
+          <main class="dashboard">
+            <div class="dashboard-top">
+              <div>
+                <h2>Cross-functional Delivery Status</h2>
+                <p class="dashboard-note">Updated today · Taipei operational window</p>
+              </div>
+              <span class="status-chip">All workstreams on track</span>
+            </div>
+
+            <div class="kpi-grid">
+              <div class="kpi">
+                <span>Completion Rate</span>
+                <strong>87%</strong>
+                <em>+12% WoW</em>
+              </div>
+              <div class="kpi">
+                <span>Open Dependencies</span>
+                <strong>14</strong>
+                <em>3 resolved</em>
+              </div>
+              <div class="kpi">
+                <span>Stakeholder Touchpoints</span>
+                <strong>28</strong>
+                <em>stable</em>
+              </div>
+              <div class="kpi">
+                <span>Projected Confidence</span>
+                <strong>92%</strong>
+                <em>green</em>
+              </div>
+            </div>
+
+            <div class="work-grid">
+              <section class="work-card">
+                <h3>Workstream Tracker</h3>
+                <table class="work-table">
+                  <thead>
+                    <tr>
+                      <th>Initiative</th>
+                      <th>Owner</th>
+                      <th>Status</th>
+                      <th>Progress</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Patient Flow Review</td>
+                      <td>Ops</td>
+                      <td>Active</td>
+                      <td><div class="progress-track"><span style="width: 82%"></span></div></td>
+                    </tr>
+                    <tr>
+                      <td>Documentation Audit</td>
+                      <td>Admin</td>
+                      <td>Review</td>
+                      <td><div class="progress-track"><span style="width: 64%"></span></div></td>
+                    </tr>
+                    <tr>
+                      <td>Resource Allocation</td>
+                      <td>Planning</td>
+                      <td>Active</td>
+                      <td><div class="progress-track"><span style="width: 76%"></span></div></td>
+                    </tr>
+                    <tr>
+                      <td>Weekly Quality Loop</td>
+                      <td>Team</td>
+                      <td>Queued</td>
+                      <td><div class="progress-track"><span style="width: 41%"></span></div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+
+              <section class="work-card">
+                <h3>Activity Log</h3>
+                <div class="log-list">
+                  <div class="log-item">
+                    <span>10:42 · SYSTEM</span>
+                    Dependency matrix refreshed with latest branch data.
+                  </div>
+                  <div class="log-item">
+                    <span>10:38 · REVIEW</span>
+                    Weekly operational notes consolidated for manager sync.
+                  </div>
+                  <div class="log-item">
+                    <span>10:31 · ANALYSIS</span>
+                    Variance threshold recalculated across active workstreams.
+                  </div>
+                  <div class="log-item">
+                    <span>10:24 · PLANNING</span>
+                    Risk register updated. No immediate escalation required.
+                  </div>
+                </div>
+              </section>
+            </div>
+          </main>
+        </div>
+      </div>
+    </section>
+
     <script>
       const app = document.querySelector(".app");
       const calculator = document.querySelector("#calculator");
@@ -741,6 +1183,8 @@
       const shareButton = document.querySelector("#shareButton");
       const resetButton = document.querySelector("#resetButton");
       const shareBox = document.querySelector("#shareBox");
+      const fakeWorkButton = document.querySelector("#fakeWorkButton");
+      const exitFakeWorkButton = document.querySelector("#exitFakeWorkButton");
 
       let salaryMode = "monthly";
 
@@ -847,6 +1291,19 @@
         poopDays.value = 18;
         snackPrice.value = 90;
         setMode("monthly");
+      });
+
+      function setFakeWorkMode(isActive) {
+        document.body.classList.toggle("fake-mode", isActive);
+        fakeWorkButton.setAttribute("aria-pressed", String(isActive));
+      }
+
+      fakeWorkButton.addEventListener("click", () => setFakeWorkMode(true));
+      exitFakeWorkButton.addEventListener("click", () => setFakeWorkMode(false));
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && document.body.classList.contains("fake-mode")) {
+          setFakeWorkMode(false);
+        }
       });
 
       calculate();
